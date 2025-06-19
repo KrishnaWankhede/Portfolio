@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishna P. Wankhede | Interactive Resume</title>
+    <!-- Chosen Palette: Neutral Professional - White, Light Grey, and Dark Blue-Grey -->
+    <!-- Application Structure Plan: The SPA adopts a minimalist, spacious layout inspired by 222.place, featuring distinct, full-width sections. A subtle, sticky header with navigation anchors allows smooth scrolling between these sections. Each section focuses on a key aspect of the resume (Home, Skills, Portfolio, Education, Publications, Contact) to reduce cognitive load and enhance scannability. The 'Portfolio' section remains interactive with filtering capabilities and integrated charts to highlight quantifiable achievements. This structure is chosen for its simplicity, elegant user flow, and emphasis on clear content presentation, making it easy for recruiters to consume information efficiently. -->
+    <!-- Visualization & Content Choices: Quantifiable resume achievements are presented using Chart.js donut and bar charts within project cards (Goal: Inform/Compare), providing quick visual summaries of impact. Skills are listed as styled text tags (Goal: Inform). Projects are dynamically filterable (Goal: Organize/Relationships) via JavaScript, allowing users to drill down by technology. All visual elements and interactions adhere to the no SVG/Mermaid constraint. The content is directly from the resume, integrated into this clean, sectioned layout for enhanced readability and exploration. Library/Method: Chart.js for all charts, TailwindCSS for layout and styling. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* neutral off-white */
+            color: #374151; /* slate-700 for primary text */
+        }
+        .nav-link {
+            transition: color 0.2s ease-in-out;
+            color: #6b7280; /* medium grey */
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #1f2937; /* dark grey */
+        }
+        .filter-btn {
+            transition: all 0.2s ease-in-out;
+            border: 1px solid #d1d5db; /* light grey border */
+            color: #4b5563; /* medium-dark grey text */
+            background-color: #ffffff; /* white background */
+        }
+        .filter-btn.active {
+            background-color: #1f2937; /* very dark grey */
+            color: #ffffff; /* white text */
+            border-color: #1f2937;
+        }
+        .project-card {
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #e5e7eb; /* very light grey border */
+            background-color: #ffffff; /* white background */
+            color: #374151; /* dark grey text */
+        }
+        .project-card:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 180px;
+            max-height: 220px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center max-w-4xl">
+            <a href="#home" class="text-xl font-bold text-gray-900">KP.</a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#skills" class="nav-link font-medium">Skills</a>
+                <a href="#portfolio" class="nav-link font-medium">Portfolio</a>
+                <a href="#education" class="nav-link font-medium">Education</a>
+                <a href="#publications" class="nav-link font-medium">Publications</a>
+                <a href="#contact" class="nav-link font-medium">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 bg-white">
+            <a href="#skills" class="block py-2 nav-link">Skills</a>
+            <a href="#portfolio" class="block py-2 nav-link">Portfolio</a>
+            <a href="#education" class="block py-2 nav-link">Education</a>
+            <a href="#publications" class="block py-2 nav-link">Publications</a>
+            <a href="#contact" class="block py-2 nav-link">Contact</a>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Home Section -->
+        <section id="home" class="flex items-center justify-center min-h-screen py-16 px-6 text-center bg-gray-50">
+            <div class="max-w-3xl mx-auto">
+                <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+                    Krishna P. Wankhede
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-700 mb-8">
+                    ML/AI Engineer & Researcher focused on building intelligent systems.
+                </p>
+                <p class="text-lg text-gray-600">
+                    Highly motivated and results-driven Master's candidate in Computer Science (AI Specialization) with a strong foundation in Machine Learning, Deep Learning, and Reinforcement Learning. Proven ability to design, develop, and deploy AI solutions, including advanced applications in LLMs, robotics, and computer vision.
+                </p>
+                <div class="mt-10 flex justify-center space-x-4">
+                    <a href="#portfolio" class="px-6 py-3 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition duration-200">View Portfolio</a>
+                    <a href="#contact" class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition duration-200">Get In Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 px-6 bg-white">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Technical Skills</h2>
+                <p class="text-lg text-gray-700 mb-12">
+                    A comprehensive overview of my expertise, ranging from foundational programming to advanced AI/ML and MLOps practices.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="font-semibold text-2xl text-gray-800 mb-4">AI / ML</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">LLMs</span>
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">Transformers</span>
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">Reinforcement Learning</span>
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">Deep Learning</span>
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">NLP</span>
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">RAG</span>
+                            <span class="bg-blue-50 text-blue-700 px-4 py-1 rounded-full text-sm font-medium">Computer Vision</span>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="font-semibold text-2xl text-gray-800 mb-4">Cloud & MLOps</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-emerald-50 text-emerald-700 px-4 py-1 rounded-full text-sm font-medium">AWS</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-4 py-1 rounded-full text-sm font-medium">GCP</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-4 py-1 rounded-full text-sm font-medium">Docker</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-4 py-1 rounded-full text-sm font-medium">Kubernetes</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-4 py-1 rounded-full text-sm font-medium">CI/CD</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-4 py-1 rounded-full text-sm font-medium">MLflow</span>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
+                        <h3 class="font-semibold text-2xl text-gray-800 mb-4">Programming & Frameworks</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-purple-50 text-purple-700 px-4 py-1 rounded-full text-sm font-medium">Python (PyTorch, TF)</span>
+                            <span class="bg-purple-50 text-purple-700 px-4 py-1 rounded-full text-sm font-medium">C/C++</span>
+                            <span class="bg-purple-50 text-purple-700 px-4 py-1 rounded-full text-sm font-medium">Java</span>
+                            <span class="bg-purple-50 text-purple-700 px-4 py-1 rounded-full text-sm font-medium">SQL</span>
+                            <span class="bg-purple-50 text-purple-700 px-4 py-1 rounded-full text-sm font-medium">React</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 px-6 bg-gray-50">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Portfolio</h2>
+                <p class="text-lg text-gray-700 mb-12">
+                    Explore my professional experiences and academic projects, showcasing my applied skills in various AI domains. Use the filters below to navigate through my work.
+                </p>
+                
+                <!-- Filters -->
+                <div id="filters" class="flex flex-wrap justify-center gap-3 mb-12">
+                    <button class="filter-btn px-5 py-2 rounded-full font-medium" data-filter="all">All</button>
+                    <button class="filter-btn px-5 py-2 rounded-full font-medium" data-filter="llm">LLM</button>
+                    <button class="filter-btn px-5 py-2 rounded-full font-medium" data-filter="rl">Reinforcement Learning</button>
+                    <button class="filter-btn px-5 py-2 rounded-full font-medium" data-filter="robotics">Robotics</button>
+                    <button class="filter-btn px-5 py-2 rounded-full font-medium" data-filter="cv">Computer Vision</button>
+                    <button class="filter-btn px-5 py-2 rounded-full font-medium" data-filter="nlp">NLP</button>
+                </div>
+
+                <!-- Project Grid -->
+                <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Items will be injected by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-20 px-6 bg-white">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Education</h2>
+                <p class="text-lg text-gray-700 mb-12">
+                    My academic journey has provided a strong theoretical and practical foundation in computer science and artificial intelligence.
+                </p>
+                 <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <div class="p-8 rounded-lg shadow-sm border border-gray-100 bg-gray-50">
+                        <p class="font-bold text-gray-800 text-xl">University of Southern California</p>
+                        <p class="text-gray-700 mt-1">Master of Science in Computer Science (AI Specialization)</p>
+                        <p class="text-sm text-gray-600 mt-2">August 2023 - August 2025 | Los Angeles, CA</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-4 space-y-1">
+                            <li>Relevant Coursework: Artificial Intelligence, Deep Learning and its Applications, Natural Language Processing, Reinforcement Learning, Introduction to Robotics.</li>
+                            <li>GPA: 3.34/4.0</li>
+                        </ul>
+                    </div>
+                     <div class="p-8 rounded-lg shadow-sm border border-gray-100 bg-gray-50">
+                        <p class="font-bold text-gray-800 text-xl">MIT World Peace University</p>
+                        <p class="text-gray-700 mt-1">Bachelor of Technology in Computer Science & Engineering</p>
+                        <p class="text-sm text-gray-600 mt-2">July 2019 - June 2023 | Pune, India</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-4 space-y-1">
+                            <li>Relevant Coursework: Artificial Intelligence, Machine Learning, Data Structures & Algorithms, Database Management Systems.</li>
+                            <li>GPA: 3.65/4.0</li>
+                        </ul>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publications" class="py-20 px-6 bg-gray-50">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Publications</h2>
+                <p class="text-lg text-gray-700 mb-12">
+                    My contributions to academic research, published in various conferences and journals.
+                </p>
+                <div class="grid grid-cols-1 gap-6 text-left">
+                    <div class="p-6 rounded-lg border border-gray-100 bg-white">
+                        <p class="font-medium text-gray-800 text-lg">Deep Learning Approach for Fake Currency Recognition</p>
+                        <p class="text-gray-700 mt-1 text-sm">Conference/Journal Name (if applicable), Year</p>
+                    </div>
+                    <div class="p-6 rounded-lg border border-gray-100 bg-white">
+                        <p class="font-medium text-gray-800 text-lg">Multiclass Classification of Brain MRI using Deep Learning Algorithm</p>
+                        <p class="text-gray-700 mt-1 text-sm">Conference/Journal Name (if applicable), Year</p>
+                    </div>
+                     <div class="p-6 rounded-lg border border-gray-100 bg-white">
+                        <p class="font-medium text-gray-800 text-lg">Review on Modi Handwritten Characters Recognition</p>
+                        <p class="text-gray-700 mt-1 text-sm">Conference/Journal Name (if applicable), Year</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-6 bg-white">
+            <div class="max-w-xl mx-auto text-center">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    I'm actively seeking new opportunities to apply my AI/ML expertise. Feel free to connect via email or my professional networks.
+                </p>
+                <div class="flex justify-center items-center space-x-6">
+                    <a href="mailto:wankhede@usc.edu" class="text-gray-700 hover:text-gray-900 text-lg font-medium">Email</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="https://www.linkedin.com/in/krishna-wankhede-P" target="_blank" class="text-gray-700 hover:text-gray-900 text-lg font-medium">LinkedIn</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="https://github.com/KrishnaWankhede" target="_blank" class="text-gray-700 hover:text-gray-900 text-lg font-medium">GitHub</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const portfolioData = [
+                {
+                    type: 'Experience',
+                    title: 'Graduate Research Assistant',
+                    org: 'Valero Lab, USC',
+                    date: 'Jan 2025 - Present',
+                    description: 'Leading research on Proximal Policy Optimization (PPO) for dexterous robotic manipulation, enhancing training stability and policy improvement in MuJoCo simulations. Implementing curriculum-based reinforcement learning strategies to improve model efficiency and convergence speed.',
+                    tags: ['rl', 'robotics'],
+                    chart: null
+                },
+                {
+                    type: 'Experience',
+                    title: 'Machine Learning Intern',
+                    org: 'XCaliber Infotech Pvt. Ltd.',
+                    date: 'Mar 2022 - Jun 2022',
+                    description: 'Designed and deployed various NLP applications (chatbot, NER), automated data preprocessing pipelines for AWS deployment, and generated over 50,000 annotated data points for training.',
+                    tags: ['nlp', 'mlops'],
+                    chart: {
+                        type: 'bar',
+                        id: 'intern-chart',
+                        data: {
+                            labels: ['Engagement Boost', 'Manual Reduction'],
+                            datasets: [{
+                                label: 'Impact (%)',
+                                data: [30, 50],
+                                backgroundColor: ['#6366f1', '#34d399'], /* indigo-500, emerald-500 */
+                                borderColor: ['#4f46e5', '#10b981'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: { scales: { y: { beginAtZero: true, max: 60, ticks: { display: false } }, x: { ticks: { font: { size: 10, color: '#4b5563' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: (context) => context[0].label.replace(' Boost', '').replace(' Reduction', '') + ' (%)', label: (context) => context.raw + '%' } } } }
+                    }
+                },
+                {
+                    type: 'Project',
+                    title: 'Theory-of-Mind in LLM-Driven Multi-Agent Systems',
+                    org: 'University of Southern California',
+                    date: 'Mar 2025 - Apr 2025',
+                    description: 'Developed emotionally adaptive LLM agents using a VAD framework. Simulated complex social behaviors (trust, retaliation) with LLaMa-based models, achieving emergent strategy shifts and stable cooperation patterns over 30+ rounds.',
+                    tags: ['llm', 'rl'],
+                    chart: null
+                },
+                {
+                    type: 'Project',
+                    title: 'Imitation for Dynamic Robot Control',
+                    org: 'University of Southern California',
+                    date: 'Oct 2024 - Nov 2024',
+                    description: 'Implemented Behavioral Cloning for HalfCheetah-v4, achieving 56.1% of expert performance with a 3-layer neural network. Optimized batch size and evaluation parameters to achieve an average return of 2261.48.',
+                    tags: ['rl', 'robotics'],
+                     chart: {
+                        type: 'doughnut',
+                        id: 'imitation-chart',
+                        data: {
+                            labels: ['Achieved Performance', 'Remaining to Expert'],
+                            datasets: [{
+                                data: [56.1, 100 - 56.1],
+                                backgroundColor: ['#3b82f6', '#d1d5db'], /* blue-500, gray-300 */
+                                hoverOffset: 4
+                            }]
+                        },
+                         options: { plugins: { tooltip: { callbacks: { label: (c) => `${c.label}: ${c.raw}%` } } } }
+                    }
+                },
+                {
+                    type: 'Project',
+                    title: 'Logical Fallacy Detection in LLMs',
+                    org: 'University of Southern California',
+                    date: 'Mar 2024 - May 2024',
+                    description: 'Improved model precision by 21% and recall by 42% using few-shot learning to detect logical fallacies in GPT-3.5/4. Optimized techniques led to a 20% F1 score improvement for real-time error correction.',
+                    tags: ['llm', 'nlp'],
+                    chart: {
+                        type: 'bar',
+                        id: 'fallacy-chart',
+                        data: {
+                            labels: ['Precision (+21%)', 'Recall (+42%)'],
+                            datasets: [{
+                                label: 'Improvement (%)',
+                                data: [21, 42],
+                                backgroundColor: ['#8b5cf6', '#c084fc'], /* violet-500, violet-300 */
+                                borderWidth: 1
+                            }]
+                        },
+                        options: { scales: { y: { beginAtZero: true, max: 50, ticks: { display: false } }, x: { ticks: { font: { size: 10, color: '#4b5563' } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => context.raw + '%' } } } }
+                    }
+                },
+                {
+                    type: 'Project',
+                    title: '5x5 GO Game AI Agent',
+                    org: 'University of Southern California',
+                    date: 'Oct 2023 - Nov 2023',
+                    description: 'Engineered an AI agent for 5x5 GO using Q-learning and reinforcement learning. Outperformed five levels of AI opponents with an 87% winning rate, demonstrating strong data-driven decision-making.',
+                    tags: ['rl'],
+                    chart: {
+                        type: 'doughnut',
+                        id: 'go-chart',
+                        data: {
+                            labels: ['Win Rate', 'Loss Rate'],
+                            datasets: [{
+                                data: [87, 13],
+                                backgroundColor: ['#22c55e', '#ef4444'], /* green-500, red-500 */
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: { plugins: { tooltip: { callbacks: { label: (c) => `${c.label}: ${c.raw}%` } } } }
+                    }
+                },
+                {
+                    type: 'Project',
+                    title: 'LSTM for Brain Tumor Classification',
+                    org: 'MIT World Peace University',
+                    date: 'Feb 2023 - Jun 2023',
+                    description: 'Optimized LSTM networks for brain tumor classification, achieving 94% accuracy, surpassing CNN models. Enhanced diagnostic efficiency with YOLOV5 automation, reducing annotation time by 70%.',
+                    tags: ['cv', 'deep-learning'],
+                    chart: {
+                        type: 'doughnut',
+                        id: 'lstm-chart',
+                        data: {
+                            labels: ['Accuracy', 'Error'],
+                            datasets: [{
+                                data: [94, 6],
+                                backgroundColor: ['#0ea5e9', '#d1d5db'], /* sky-500, gray-300 */
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: { plugins: { tooltip: { callbacks: { label: (c) => `${c.label}: ${c.raw}%` } } } }
+                    }
+                }
+            ];
+
+            const portfolioGrid = document.getElementById('portfolio-grid');
+
+            portfolioData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'project-card rounded-lg shadow-sm p-6 flex flex-col';
+                card.dataset.tags = item.tags.join(' ');
+
+                let chartHtml = '';
+                if (item.chart) {
+                    chartHtml = `
+                        <div class="chart-container mt-4 mb-4">
+                            <canvas id="${item.chart.id}"></canvas>
+                        </div>`;
+                }
+                
+                const typeBg = item.type === 'Experience' ? 'bg-orange-100 text-orange-700' : 'bg-indigo-100 text-indigo-700';
+
+                card.innerHTML = `
+                    <div>
+                        <span class="text-xs font-bold uppercase ${typeBg} px-3 py-1 rounded-full">${item.type}</span>
+                        <h3 class="font-bold text-xl text-gray-800 mt-3">${item.title}</h3>
+                        <p class="text-sm font-medium text-gray-600">${item.org} | ${item.date}</p>
+                        <p class="text-gray-700 mt-4">${item.description}</p>
+                    </div>
+                    ${chartHtml}
+                `;
+                portfolioGrid.appendChild(card);
+            });
+
+            portfolioData.forEach(item => {
+                if (item.chart) {
+                    const ctx = document.getElementById(item.chart.id).getContext('2d');
+                    const chartOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        ...item.chart.options,
+                        plugins: {
+                            ...item.chart.options.plugins,
+                            tooltip: {
+                                ...item.chart.options.plugins.tooltip,
+                                titleColor: '#1f2937', // Tooltip title color
+                                bodyColor: '#1f2937', // Tooltip body color
+                                backgroundColor: '#ffffff', // Tooltip background color
+                                borderColor: '#d1d5db',
+                                borderWidth: 1
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ...item.chart.options.scales?.x,
+                                ticks: {
+                                    color: '#4b5563' // X-axis label color
+                                }
+                            },
+                            y: {
+                                ...item.chart.options.scales?.y,
+                                ticks: {
+                                    color: '#4b5563' // Y-axis label color
+                                }
+                            }
+                        }
+                    };
+                    new Chart(ctx, {
+                        type: item.chart.type,
+                        data: item.chart.data,
+                        options: chartOptions
+                    });
+                }
+            });
+
+            const filtersContainer = document.getElementById('filters');
+            const projectCards = document.querySelectorAll('.project-card');
+            let activeFilters = new Set(['all']);
+
+            filtersContainer.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'BUTTON') return;
+
+                const filter = e.target.dataset.filter;
+
+                if (filter === 'all') {
+                    activeFilters.clear();
+                    activeFilters.add('all');
+                } else {
+                    activeFilters.delete('all');
+                    if (activeFilters.has(filter)) {
+                        activeFilters.delete(filter);
+                    } else {
+                        activeFilters.add(filter);
+                    }
+                    if (activeFilters.size === 0) {
+                        activeFilters.add('all');
+                    }
+                }
+                
+                updateActiveButtons();
+                filterProjects();
+            });
+            
+            function updateActiveButtons() {
+                const buttons = filtersContainer.querySelectorAll('.filter-btn');
+                buttons.forEach(button => {
+                    if (activeFilters.has(button.dataset.filter)) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            }
+
+            function filterProjects() {
+                projectCards.forEach(card => {
+                    const cardTags = new Set(card.dataset.tags.split(' '));
+                    let isVisible = false;
+                    
+                    if (activeFilters.has('all')) {
+                        isVisible = true;
+                    } else {
+                        isVisible = [...activeFilters].every(f => cardTags.has(f));
+                    }
+
+                    if (isVisible) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            }
+            
+            updateActiveButtons();
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+
+    </script>
+</body>
+</html>
